@@ -12,12 +12,12 @@ function M.cowboy()
       if vim.v.count > 0 then
         count = 0
       end
-      if count >= 10 then
+      if count >= 11 then
         ok, id = pcall(vim.notify, "Hold it Rasta!", vim.log.levels.WARN, {
           icon = "🤠",
           replace = id,
           keep = function()
-            return count >= 10
+            return count >= 11
           end,
         })
         if not ok then
@@ -36,3 +36,5 @@ function M.cowboy()
 end
 
 return M
+
+

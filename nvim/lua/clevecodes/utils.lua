@@ -2,7 +2,21 @@
 
 local M = {}
 
-local hexChars = "0123456789abcdef"
+-- local hexChars = "0123456789abcdef"
+local hexChars = "0123456789ABCDEF"
+
+-- function M.hex_to_rgb(hex)
+--   hex = string.lower(hex)
+--   local ret = {}
+--   for i = 0, 2 do
+--     local char1 = string.sub(hex, i * 2 + 2, i * 2 + 2)
+--     local char2 = string.sub(hex, i * 2 + 3, i * 2 + 3)
+--     local digit1 = string.find(hexChars, char1) - 1
+--     local digit2 = string.find(hexChars, char2) - 1
+--     ret[i + 1] = (digit1 * 16 + digit2) / 255.0
+--   end
+--   return ret
+-- end
 
 function M.hex_to_rgb(hex)
   hex = string.lower(hex)
@@ -12,7 +26,7 @@ function M.hex_to_rgb(hex)
     local char2 = string.sub(hex, i * 2 + 3, i * 2 + 3)
     local digit1 = string.find(hexChars, char1) - 1
     local digit2 = string.find(hexChars, char2) - 1
-    ret[i + 1] = (digit1 * 16 + digit2) / 255.0
+    ret[i + 1] = digit1 * 16 + digit2
   end
   return ret
 end
@@ -133,6 +147,25 @@ function M.hslToHex(h, s, l)
 
   return string.format("#%02x%02x%02x", r, g, b)
 end
+
+function M.replaceHexWithHSL()
+  -- Get the current line number
+  local line_number = vim.api.nvim_win_get_cursor(0)[1]
+
+  -- Get the line content
+  local line_content = vim.api.nvim_buf_get_lines(0, line_number - 1, line_number, false)[1]
+
+  -- Find hex code patterns and replace them
+  for hex in line_content:gmatch("#[0-9a-fA-F]+") do
+    local hsl = M.hexToHSL(hex)
+    line_content = line_content:gsub(hex, hsl)
+  end
+
+  -- Set the line content back
+  vim.api.nvim_buf_set_lines(0, line_number - 1, line_number, false, { line_content })
+end
+
+return M
 
 function M.replaceHexWithHSL()
   -- Get the current line number

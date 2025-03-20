@@ -154,6 +154,10 @@ return {
         "typescript",
         "vim",
         "yaml",
+        -- go
+        "go",
+        -- rust
+        "rust",
       },
     },
   },
